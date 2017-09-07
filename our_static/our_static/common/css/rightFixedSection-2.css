@@ -1,0 +1,44 @@
+#rightFixedSection{
+	width: 16.6667%;
+	position: fixed;
+	right: 0;
+	top: 0;
+}
+#rightFixedSection .card{
+	margin-top: 0;
+}
+#rightFixedSection .card-content{
+	padding: 8px;
+}
+#rightFixedSection .card-content .card-title{
+	line-height: 16px;
+	font-size: 16px;
+	margin-bottom: 0;
+}
+#rightFixedSection .card-image{
+	height: 0;
+	padding-bottom: 56.25%;
+	background-size: cover !important;
+	background-position: center center !important;
+	background-repeat: no-repeat !important;
+}
+#rightFixedSection .card-reveal{
+	padding: 14px 10px;
+}
+#rightFixedSection .card-reveal i{
+	color: #ff4e4e
+}
+#rightFixedSection .card-reveal .card-title{
+	font-size: 20px;
+}
+@media screen and (max-width: 992px){
+	#rightFixedSection{
+		width: 23%;
+	}
+}
+
+@media screen and (max-width: 600px){
+	#rightFixedSection{
+		display: none;
+	}
+}

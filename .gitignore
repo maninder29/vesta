@@ -1,0 +1,10 @@
+.*
+!/.gitignore
+**/media
+**/static
+**/media_root
+*.pyc
+**/bin
+**/include
+**/lib
+**/local

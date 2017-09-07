@@ -1,0 +1,258 @@
+{% load staticfiles %}
+{% load customer_tags %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{% block title %}Vesta | {{category}}{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="shortcut icon" href="{% static 'logo.png' %}" type="image/x-icon">
+  {% block og %}{% endblock %}
+  <link rel="stylesheet" type="text/css" href="{% static 'social/css/materialize.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'social/css/font-awesome.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'common/css/rightFixedSection-2.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'social/css/common-03-07-17.css' %}">
+  {% block css %}{% endblock %}
+  <style type="text/css">
+.snapshot-generator {
+  display: block;
+  height: 1px;
+  left: 0;
+  object-fit: contain;
+  position: fixed;
+  top: 0;
+  width: 1px;
+  z-index: -1;
+}
+.thumbnail{
+  text-align: center;
+}
+.thumbnail img{
+  max-width: 80%;
+  display: none;
+  max-height: 200px;
+}
+#all-read i{
+  line-height: 44px;
+  cursor: pointer;
+}
+</style>
+  <script type="text/javascript" src="{% static 'social/js/jquery-3.2.1.min.js' %}"></script>
+</head>
+<body bgcolor="#eee">
+<ul id="sideBar" class="side-nav fixed">
+  <form action="{% url 'search_user' %}" id="search-form">
+    <input type="text" name="q" autocomplete="off" class="autocomplete" placeholder="search users" required>
+    <i class="material-icons">clear</i>
+  </form>
+
+  <li><a href="/">Home<i class="material-icons">home</i></a></li>
+  {% block sidebar %}
+  <a href="#!" id="searchbtn"><i class="material-icons">search</i></a>
+
+  <li><a href="{% url 'profile' request.user.id %}">{{request.user.profile.name}}<i class="material-icons">person</i></a></li>
+  <a href="{% url 'settings' %}"><i class="material-icons">settings</i></a>
+
+  <li><a href="{% url 'saved_posts' %}">Saved<i class="material-icons">cloud_download</i></a></li>
+  <span>{% get_saved_post_count request.user %}</span>
+
+  <li><a href="{% url 'followed_posts' %}">Discussion<i class="material-icons">email</i></a></li>
+  <span>{% get_discussed_post_count request.user %}</span>
+
+  <li><a href="{% url 'all_followers' request.user.id %}">Followers<i class="material-icons">group</i></a></li>
+  <span>{% get_followers_count request.user %}</span>
+
+  <li><a href="{% url 'all_following' request.user.id %}">Following<i class="material-icons">group_add</i></a></li>
+  <span>{% get_following_count request.user %}</span>
+
+  <li><a href="{% url 'all_photos' request.user.id %}">Photos<i class="material-icons">collections</i></a></li>
+  <span>{% get_photos_count request.user %}</span>
+
+  <li><a href="{% url 'all_videos' request.user.id %}">Videos<i class="material-icons">video_library</i></a></li>
+  <span>{% get_videos_count request.user %}</span>
+
+  <li><a href="{% url 'logout' %}">Logout<i class="material-icons">power_settings_new</i></a></li>
+  <li><div class="divider"></div></li>
+  {% unread_notifs request.user as n %}
+  
+  <li><a class="subheader">Notifications<span class="new badge" id="notif-count">{{n}}</span></a></li>
+
+  {% notifications request.user %}
+  {% endblock %}
+</ul>
+<a href="#" data-activates="sideBar" class="button-collapse show-on-med-and-down sideBarBtn"><i class="material-icons">menu</i></a>
+<i class="material-icons sideBarNotification-icon">priority_high</i>
+<div class="row">
+  {% block tabs %}
+  <div class="col l7 offset-l3 m9 s11" style="padding: 0; margin-bottom: 45px;">
+    <ul class="tabs tabs-fixed-width">
+      <li class="tab col s3">
+        <a href="{% url 'list_doctor' %}" class="{% if category == 'differential' %}active{% endif %}">differential</a>
+      </li>
+      <li class="tab col s3">
+        <a href="{% url 'list_normal' %}" class="{% if category == 'mySpace' %}active{% endif %}">myspace</a>
+      </li>
+      <li class="tab col s3">
+        <a href="{% url 'list_patient' %}" class="{% if category == 'insights' %}active{% endif %}">insights</a>
+      </li>
+    </ul>
+  </div>
+  {% endblock %}
+
+  <div class="col l7 offset-l3 m9 s12">
+    {% block content %}
+    <div class="container">
+      <div class="row">
+        <div class="col s12" id="post-section">
+        {% include 'social/newPost.html' %}
+
+        {% for post in object_list %}
+          {% include 'social/post.html' %}
+        {% endfor %}
+        </div>
+        <div class="col s12" style="text-align: center;">
+          <div id="post-loader" class="preloader-wrapper big active" url="/posts/new_{{category}}_list/{{id}}/" status="active">
+            <div class="spinner-layer spinner-blue">
+              <div class="circle-clipper left">
+                <div class="circle"></div>
+              </div><div class="gap-patch">
+                <div class="circle"></div>
+              </div><div class="circle-clipper right">
+                <div class="circle"></div>
+              </div>
+            </div>
+            <div class="spinner-layer spinner-red">
+              <div class="circle-clipper left">
+                <div class="circle"></div>
+              </div><div class="gap-patch">
+                <div class="circle"></div>
+              </div><div class="circle-clipper right">
+                <div class="circle"></div>
+              </div>
+            </div>
+            <div class="spinner-layer spinner-yellow">
+              <div class="circle-clipper left">
+                <div class="circle"></div>
+              </div><div class="gap-patch">
+                <div class="circle"></div>
+              </div><div class="circle-clipper right">
+                <div class="circle"></div>
+              </div>
+            </div>
+            <div class="spinner-layer spinner-green">
+              <div class="circle-clipper left">
+                <div class="circle"></div>
+              </div><div class="gap-patch">
+                <div class="circle"></div>
+              </div><div class="circle-clipper right">
+                <div class="circle"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endblock %}
+  </div>
+</div>
+
+{% include 'common/rightFixedSection.html' %}
+
+<!-- MODALS -->
+  <div id="deleteConfirmModal" class="modal">
+    <div class="modal-content">
+      <h4>Are you sure ?</h4>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">No</a>
+      <a href="#!" class="modal-action waves-effect waves-green btn-flat" id="confirm-yes">Yes</a>
+    </div>
+  </div>
+
+  <div id="shareModal" class="modal" style="height: 200px;">
+    <div class="modal-content">
+      <h4>Share this post on social media</h4>
+      <a id="fb_share_button" href onclick="return !window.open(this.href, 'Facebook', 'width=640,height=580')">
+        <i class="fa fa-3x fa-facebook" aria-hidden="true"></i>
+      </a>
+      <a id="twitter_share_button" href style="margin-left: 20px">
+        <i class="fa fa-3x fa-twitter" aria-hidden="true"></i>
+      </a>
+    </div>
+  </div>
+
+  <div id="likersModal" class="modal" style="width: 25%;">
+    <div class="modal-content" style="padding-bottom: 0;"></div>
+  </div>
+
+
+{% csrf_token %}
+<script type="text/javascript" src="{% static 'social/js/materialize.min.js' %}"></script>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script src="https://js.pusher.com/4.1/pusher.min.js"></script>
+<script type="text/javascript" src="{% static 'social/js/common-23-06-17.js' %}"></script>
+<script type="text/javascript" src="{% static 'social/js/media_thumbnail-09-07-17.js' %}"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  badge = $('#notif-count');
+  icon = $('.sideBarNotification-icon')
+  counter = parseInt(badge.text());
+  if(counter==0){
+    badge.css('visibility', 'hidden');
+    icon.css('visibility', 'hidden');
+  }
+  Pusher.logToConsole = false;
+  var pusher = new Pusher('cf69569914b189660423', {cluster: 'ap2',encrypted: true});
+  var channel = pusher.subscribe('{{request.user.username}}');
+  channel.bind('notification', function(data) {
+    var txt = '\
+    <li class="new-notif" style="background: rgba(0,0,0,0.2);">\
+      <a class="waves-effect waves-light" href="/posts/deactivate/notification/'+data.id+'/" title="'+data.title+'">\
+        <div style="background: url('+data.dp+')"></div>\
+        <span>'+data.title+'</span>\
+      </a>\
+    </li>';
+    $('.subheader').after(txt);
+    $('.subheader').next().slideToggle(1000);
+    counter = parseInt(badge.text());
+    if(counter==99){
+      badge.text('99+');
+    }else{
+      badge.text(counter+1);
+    }
+    badge.css('visibility', 'visible');
+    icon.css('visibility', 'visible');
+  });
+
+  channel.bind('notification2', function(data) {
+    var txt = '\
+    <li class="new-notif" style="background: rgba(0,0,0,0.2);">\
+      <a class="waves-effect waves-light" href="'+data.link+'" title="'+data.title+'">\
+        <div style="background: url('+data.dp+')"></div>\
+        <span>'+data.title+'</span>\
+      </a>\
+    </li>';
+    $('.subheader').after(txt);
+    $('.subheader').next().slideToggle(1000);
+    counter = parseInt(badge.text());
+    if(counter==99){
+      badge.text('99+');
+    }else{
+      badge.text(counter+1);
+    }
+    badge.css('visibility', 'visible');
+    icon.css('visibility', 'visible');
+  });
+})
+</script>
+{% block post_loader_js %}
+<script type="text/javascript" src="{% static 'social/js/postLoader-23-06-17.js' %}"></script>
+<script type="text/javascript">
+  load_pages('{{category}}');
+  $(window).scroll(function() {
+    load_pages('{{category}}');
+  });
+</script>
+{% endblock %}
+{% block js %}{% endblock %}
+</body>
+</html>

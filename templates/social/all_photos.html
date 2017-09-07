@@ -1,0 +1,37 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Vesta | Photos{% endblock %}
+
+
+{% block css %}
+<style type="text/css">
+  .indicator{
+    display: none;
+  }
+</style>
+{% endblock %}
+
+{% block tabs %}
+<div class="col l7 offset-l3 m9 s11" style="padding: 0; margin-bottom: 45px;">
+  <ul class="tabs tabs-fixed-width">
+    <li class="tab col s3">
+      <a href="javascript:void(0)">Photos</a>
+    </li>
+  </ul>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="col s12">
+  <div class="container" style="margin-top: 10px;">
+    <div class="row">
+      {% for m in media %}
+        <div class="col s6 m4 l3 photo">
+          <img src="{{m}}" class="responsive-img materialboxed">
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block post_loader_js %}{% endblock %}

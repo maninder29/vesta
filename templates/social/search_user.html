@@ -1,0 +1,60 @@
+{% extends 'common/base.html' %}
+{% load customer_tags %}
+
+{% block title %}Vesta | {{category}}{% endblock %}
+
+{% block css %}
+<style type="text/css">
+  .indicator{
+    display: none;
+  }
+</style>
+{% endblock %}
+
+{% block tabs %}
+<div class="col l7 offset-l3 m9 s11" style="padding: 0; margin-bottom: 60px;">
+  <ul class="tabs tabs-fixed-width">
+    <li class="tab col s3">
+      <a href="javascript:void(0)">{{category}}</a>
+    </li>
+  </ul>
+</div>
+
+{% endblock %}
+
+{% block content %}
+<div class="col s12">
+  <div class="container">
+    {% if message %}<h5>{{message}}</h5>{% endif %}
+    {% for profile in users %}
+      <div class="row user-card">
+        <div style="background: url({{profile.thumbnail_url}});"></div>
+        <div class="name">
+          <a style="background: transparent;" href="{% url 'profile' profile.user.id %}" class="card-title">{{profile.name}}</a>
+        </div>
+        {% if profile.user != request.user %}
+          {% if profile.user|follows:request.user %}
+            <div class="remove-btn">
+              <a title="Remove follower" class="waves-effect waves-light btn" href="{% url 'remove_follower' user.id %}">
+                <i class="material-icons right" style="margin:0">clear</i>
+              </a>
+            </div>
+          {% endif %}
+          <div class="follow-btn">
+            {% if request.user|follows:profile.user %}
+              <a class="waves-effect waves-light btn" href="{% url 'unfollow' profile.user.id %}">
+                <i class="fa fa-user-times" aria-hidden="true"></i>unfollow
+              </a>
+            {% else %}
+              <a class="waves-effect waves-light btn" href="{% url 'follow' profile.user.id %}">
+                <i class="fa fa-user-plus" aria-hidden="true"></i>follow
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
+{% block post_loader_js %}{% endblock %}

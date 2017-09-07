@@ -1,0 +1,166 @@
+{% extends 'common/base.html' %}
+{% load customer_tags %}
+
+{% block title %}Vesta | Settings{% endblock %}
+
+
+{% block css %}
+<style type="text/css">
+  .indicator{
+    display: none;
+  }
+  ol input{
+    margin: 0 0 5px 0 !important;
+  }
+  button{
+    margin-left: 28px;
+    padding: 0 1rem !important;
+  }
+</style>
+{% endblock %}
+
+{% block tabs %}
+<div class="col l7 offset-l3 m9 s11" style="padding: 0; margin-bottom: 45px;">
+  <ul class="tabs tabs-fixed-width">
+    <li class="tab col s3">
+      <a href="javascript:void(0)">Settings</a>
+    </li>
+  </ul>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="col s12">
+  <div class="container" style="margin-top: 10px;">
+    <form action="" method="post">{% csrf_token %}
+      <ol>
+        <li>
+          <p>Default page</p>
+          <input name="default_page" type="radio" value="differential" id="default_page_1" 
+          {% if settings.default_page == 'differential' %}checked{% endif %} />
+          <label for="default_page_1">differential</label>
+          <input name="default_page" type="radio" value="mySpace" id="default_page_2" 
+          {% if settings.default_page == 'mySpace' %}checked{% endif %} />
+          <label for="default_page_2">mySpace</label>
+          <input name="default_page" type="radio" value="insights" id="default_page_3" 
+          {% if settings.default_page == 'insights' %}checked{% endif %} />
+          <label for="default_page_3">insights</label>
+        </li>
+        <li>
+          <p>Name:</p>
+          <input type="text" name="name" maxlength="60" value="{{user.profile.name}}" required="">
+        </li>
+        {% if user.profile.doctor %}
+          <li>
+            <p>Qualification</p>
+            <div class="row">
+            {% for x in degree_choices %}
+              <div class="col s12 m4" style="margin-bottom: 10px">
+                <input type="checkbox" class="filled-in" id="degree-{{x.0}}" name="degrees" value="{{x.0}}"
+                {% if x.0 in qualification %} checked {% endif %}>
+                <label for="degree-{{x.0}}">{{x.1}}</label>
+              </div>
+            {% endfor %}
+            </div>
+          </li>
+          <li>
+            <p>Specialities</p>
+            <div class="row">
+            {% for x in speciality_choices %}
+              <div class="col s12 m4" style="margin-bottom: 10px">
+                <input type="checkbox" class="filled-in" id="speciality-{{x.0}}" name="specialities" value="{{x.0}}"
+                {% if x.0 in specialities %} checked {% endif %}>
+                <label for="speciality-{{x.0}}">{{x.1}}</label>
+              </div>
+            {% endfor %}
+            </div>
+          </li>
+          <li>
+            <p>Experience</p>
+            <div class="row">
+              <div class="input-field col s12 inline">
+                <input type="number" id="id_y" min="0" max="50" name="experience" value="{{experience}}">
+                <label for="id_y">years</label>
+              </div>
+            </div>
+          </li>
+        {% elif user.profile.student %}
+          <li>
+            <p>Qualification</p>
+            <div class="row">
+            {% for x in degree_choices %}
+              <div class="col s12 m4" style="margin-bottom: 10px">
+                <input type="checkbox" class="filled-in" id="degree-{{x.0}}" name="student_degrees" value="{{x.0}}"
+                {% if x.0 in qualification %} checked {% endif %}>
+                <label for="degree-{{x.0}}">{{x.1}}</label>
+              </div>
+            {% endfor %}
+            </div>
+          </li>
+          <li>
+            <p>University</p>
+            <input type="text" name="university" value="{{university}}">
+          </li>
+        {% elif user.profile.fitnessenthusiast %}
+          <li>
+            <p>Interests</p>
+            <div class="row">
+            {% for x in interest_choices %}
+              <div class="col s12 m4" style="margin-bottom: 10px">
+                <input type="checkbox" class="filled-in" id="interest-{{x.0}}" name="interests" value="{{x.0}}"
+                {% if x.0 in interests %} checked {% endif %}>
+                <label for="interest-{{x.0}}">{{x.1}}</label>
+              </div>
+            {% endfor %}
+            </div>
+          </li>
+        {% else %}
+          <li>
+            <p>Diseases</p>
+            <div class="row">
+            {% for x in disease_choices %}
+              <div class="col s12 m4" style="margin-bottom: 10px">
+                <input type="checkbox" class="filled-in" id="disease-{{x.0}}" name="diseases" value="{{x.0}}"
+                {% if x.0 in diseases %} checked {% endif %}>
+                <label for="disease-{{x.0}}">{{x.1}}</label>
+              </div>
+            {% endfor %}
+            </div>
+          </li>
+        {% endif %}
+        <li>
+          <p>Phone:</p>
+          <input type="text" name="phone" maxlength="13" value="{{user.profile.phone}}">
+        </li>
+        <li>
+          <p>Address:</p>
+          <input type="text" name="address" maxlength="120" value="{{user.profile.address}}">
+        </li>
+        <li>
+          <p>Age:</p>
+          <input type="text" name="age" maxlength="3" value="{{user.profile.age}}">
+        </li>
+        <li>
+          <p>Gender:</p>
+          <select name="gender">
+            <option value="male" {% if user.profile.gender == 'male' %}selected{% endif %}>Male</option>
+            <option value="female" {% if user.profile.gender == 'female' %}selected{% endif %}>Female</option>
+            <option value="other" {% if user.profile.gender == 'other' %}selected{% endif %}>Other</option>
+          </select>
+        </li>
+      </ol>
+      <button class="btn waves-effect waves-light" type="submit">Submit
+        <i class="material-icons right">send</i>
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block post_loader_js %}{% endblock %}
+{% block js %}
+<script type="text/javascript">
+$(document).ready(function() {
+  $('select').material_select();
+});
+</script>
+{% endblock %}

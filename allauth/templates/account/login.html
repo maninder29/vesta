@@ -1,0 +1,296 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>VestaSocial | Login</title>
+  <meta name = "viewport" content = "width = device-width, initial-scale = 1">
+  <link rel="stylesheet" type="text/css" href="{% static 'initialPages/css/form-section-new.css' %}">
+  <link rel="stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="{% static 'initialPages/css/social-icons.css' %}">
+  <link rel="stylesheet" href="{% static 'social/css/materialize.min.css' %}" type="text/css">
+  <script type="text/javascript" src="{% static 'social/js/jquery-3.2.1.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'social/js/materialize.min.js' %}"></script>
+	<style type="text/css">
+    *{
+        margin:0px;
+        padding:0px;
+        box-sizing: border-box;
+      }
+      body{
+        background:#252525;
+      }
+      input[type=email]:focus:not([readonly]), input[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]){
+        box-shadow: none;
+        transform: scaleX(1.1);
+        border-radius: 5px;
+        background: rgba(0,0,0,0.7) !important;
+      }
+      input[type=email]:hover:not([readonly]), input[type=text]:hover:not([readonly]), input[type=password]:hover:not([readonly]){
+        background: rgba(0,0,0,0.3);
+      }
+      .animateme {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: -1;
+      }
+
+      .bg-bubbles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+      }
+      .bg-bubbles li {
+        position: absolute;
+        list-style: none;
+        display: block;
+        width: 40px;
+        height: 40px;
+        background-color: #353535;
+        bottom: 60px;
+        -webkit-animation: square 25s infinite;
+        animation: square 25s infinite;
+        -webkit-transition-timing-function: linear;
+        transition-timing-function: linear;
+        opacity:0;
+      }
+
+      .bg-bubbles li:nth-child(1) {
+        left: 3%;
+        border-radius:50em;
+        background:transparent;
+        border:4px solid #353535;
+      }
+      .bg-bubbles li:nth-child(2) {
+        left: 6%;
+        width: 75px;
+        height: 75px;
+        -webkit-animation-delay: 2s;
+                animation-delay: 2s;
+        -webkit-animation-duration: 17s;
+                animation-duration: 17s;
+      }
+      .bg-bubbles li:nth-child(3) {
+        left: 15%;
+        width: 175px;
+        height: 175px;
+        -webkit-animation-delay: 4s;
+                animation-delay: 4s;
+      }
+      .bg-bubbles li:nth-child(4) {
+        left: 40%;
+        width: 90px;
+        height: 90px;
+        -webkit-animation-duration: 22s;
+                animation-duration: 22s;
+      }
+      .bg-bubbles li:nth-child(5) {
+        left: 70%;
+        background:transparent;
+        border:4px solid #353535;
+      }
+      .bg-bubbles li:nth-child(6) {
+        left: 90%;
+        width: 90px;
+        height: 90px;
+        -webkit-animation-delay: 3s;
+                animation-delay: 3s;
+        border-radius:50em;
+        background:transparent;
+        border:4px solid #353535;
+      }
+      .bg-bubbles li:nth-child(7) {
+        left: 32%;
+        width: 60px;
+        height: 60px;
+        -webkit-animation-delay: 7s;
+                animation-delay: 7s;
+        background:transparent;
+        border:4px solid #353535;
+      }
+      .bg-bubbles li:nth-child(8) {
+        left: 55%;
+        width: 50px;
+        height: 50px;
+        -webkit-animation-delay: 15s;
+                animation-delay: 15s;
+        -webkit-animation-duration: 40s;
+                animation-duration: 40s;
+      }
+      .bg-bubbles li:nth-child(9) {
+        left: 30%;
+        width: 140px;
+        height: 140px;
+        -webkit-animation-delay: 2s;
+                animation-delay: 2s;
+        -webkit-animation-duration: 40s;
+                animation-duration: 40s;
+        border-radius:50em;
+        background:transparent;
+        border:4px solid #353535;
+      }
+      .bg-bubbles li:nth-child(10) {
+        left: 90%;
+        width: 60px;
+        height: 60px;
+        -webkit-animation-delay: 11s;
+                animation-delay: 11s;
+      }
+      .bg-bubbles li:nth-child(11) {
+        left: 10%;
+        width: 40px;
+        height: 40px;
+        -webkit-animation-delay: 13s;
+                animation-delay: 13s;
+        border-radius:50em;
+      }
+      .bg-bubbles li:nth-child(12) {
+        left: 55%;
+        width: 175px;
+        height: 175px;
+        -webkit-animation-delay: 7s;
+                animation-delay: 7s;
+        background:transparent;
+        border:4px solid #353535;
+      }
+
+      .bg-bubbles li:nth-child(13) {
+        left: 65%;
+        width: 100px;
+        height: 100px;
+        -webkit-animation-delay: 8s;
+                animation-delay: 8s;
+        border-radius:50em;
+      }
+
+      @-webkit-keyframes square {
+        0% {
+          -webkit-transform: translateY(0);
+                  transform: translateY(0);
+          opacity:0;
+        }
+        50% {
+          opacity:1;
+        }
+        100% {
+          -webkit-transform: translateY(-700px) rotate(600deg);
+                  transform: translateY(-700px) rotate(600deg);
+          opacity:1;
+        }
+      }
+      @keyframes square {
+        0% {
+          -webkit-transform: translateY(0);
+                  transform: translateY(0);
+          opacity:0;
+        }
+        50% {
+          opacity:1;
+        }
+        100% {
+          -webkit-transform: translateY(-700px) rotate(600deg);
+                  transform: translateY(-700px) rotate(600deg);
+          opacity:0;
+        }
+      }
+  </style>
+</head>
+<body>
+<h3 style="color: white; font-weight: 100; margin: 10px 0 10px 10px;border-bottom: 1px solid">VestaSocial</h3>
+<a target="_new" href="https://play.google.com/store/apps/details?id=com.vesta.shubham.vestasocial" style="position: fixed;top: 3px;right: 0px;"><img style="width: 135px" src="{% static 'initialPages/images/g_play.png' %}" class="responsive-img"></a>
+<div class="container" style="margin-bottom: 70px;">
+  <div class="row">
+    {% block content %}
+    <div class="col s12 m6 offset-m3 l4 offset-l4">
+      <h3 style="color: white; text-align: center; font-weight: 100">Log in</h3>
+      <form method="POST" action="{% url 'account_login' %}">{% csrf_token %}
+        {% for error in form.non_field_errors %}
+          <div class="col s12"><p style="color:red">{{error}}</p></div>
+        {% endfor %}
+        <div class="input-field col s12" style="margin-top: 0">
+          <input autocomplete="off" type="email" name="login" placeholder="E-mail" style="color: white;text-align: center;border: 1px solid;" required>
+        </div>
+        {% for error in form.login.errors %}
+          <div class="col s12"><p style="color:red;margin:0px;position:relative;top:-15px">{{error}}</p></div>
+        {% endfor %}
+
+        <div class="input-field col s12" style="margin-top: 0">
+          <input autocomplete="off" type="password" name="password" placeholder="Password" style="color: white;text-align: center;border: 1px solid;" required>
+        </div>
+        {% for error in form.password.errors %}
+          <div class="col s12"><p style="color:red;margin:0px;position:relative;top:-15px">{{error}}</p></div>
+        {% endfor %}
+        <p style="padding-left: 11.25px;">
+          <input type = "checkbox" id = "id_remember" name="remember">
+          <label for="id_remember" style="color: white">Remember me</label>
+        </p>
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+        <button class="waves-effect waves-light btn" type="submit" style="margin-left: 11.25px;"> Log In  </button>
+      </form>
+
+
+      <div id = "alternate-login">
+        <div> --- Or ---  </div>
+        <div id = "image-div">
+          <a href="{% url 'social:begin' 'facebook' %}" class="icon-button facebook">
+            <i class="icon-facebook"></i><span></span>
+          </a>
+          <a href="{% url 'social:begin' 'google-oauth2' %}" class="icon-button google-plus">
+            <i class="icon-google-plus"></i><span></span>
+          </a>
+        </div>
+      </div>
+
+      <a href="{% url 'account_reset_password' %}" style="padding-left: 11.25px;">
+        Forgot Password
+      </a>
+
+      <p style="padding-left: 11.25px; color: darkgray">  If you have not created an account yet, <br>then please
+        <a href="{{ signup_url }}">&nbsp&nbspsign up&nbsp&nbsp</a> first.
+      </p>
+    </div>
+    {% endblock %}
+  </div>
+</div>
+<footer class="page-footer" style="z-index: 30; padding: 0; font-size: 15px; position: fixed; bottom: 0; width: 100%; background: #ff4e4e">
+  <div class="row" style="margin-bottom: 0">
+    <div class="col m6 s12" style="margin-top: 11px;color: white;">© 2017 Hellious Care Pvt Ltd</div>
+    <div class="col m6 s12" style="text-align: right;">
+      <ul style="margin-top: 9px;float: right;margin-left: 15px">
+        <li><a class="grey-text text-lighten-3" href="{% url 'privacy' %}">Privacy policy</a></li>
+      </ul>
+      <ul style="margin-top: 9px;float: right;">
+        <li><a class="grey-text text-lighten-3" href="{% url 'feedback' %}">Contact us</a></li>
+      </ul>
+    </div>
+  </div>
+  <!-- <div class="footer-copyright" style="padding-left: 12px">© 2017 Hellious Care Pvt Ltd</div> -->
+</footer>
+<div class="animateme">
+  <ul class="bg-bubbles">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+  </ul>
+</div>
+
+</body>
+</html>

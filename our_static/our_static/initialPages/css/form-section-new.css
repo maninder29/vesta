@@ -1,0 +1,28 @@
+#alternate-login{
+	margin-top: 15px;
+}
+
+#alternate-login > div{
+	font-size: 18px;
+	text-align: center;
+	color: white;
+}	
+
+#image-div{
+	margin-top: 20px;
+}
+
+.show-on-small-only{
+	display: none;
+}
+
+@media screen and (max-width: 600px){
+	.show-on-small-only{
+		display: block;
+	}
+}
+@media screen and (max-width: 768px){
+	#alternate-login > div{
+		font-size: 25px;
+	}
+}

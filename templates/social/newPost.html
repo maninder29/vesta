@@ -1,0 +1,47 @@
+{% load staticfiles %}
+{% if category == 'differential' and request.user.profile.type not in 'doctor, student' %}
+{% elif category == 'insights' and request.user.profile.type not in 'patient, fitness_enthusiast' %}
+{% else %}
+<div id="create-post" class="row">
+	<div class="col s12">
+		<form method='POST' action='' enctype="multipart/form-data" id="post_form">{%csrf_token%}
+			<div class="row" style="margin-bottom: 0">
+				<div class="col s2 create-post-dp" style="background: url({{request.user.profile.dp_url}})"></div>
+				<div class="col s10 input-field">
+					<textarea class="materialize-textarea" id="id_content" name="content" style="color:black">{{ instance.content }}</textarea>
+					<label for="id_content" class="active" id="content_label">
+						{% if category == 'mySpace' %}How you doing ?{% elif category == 'insights' %}Get Insights{%  elif category == 'differential' %}Get a differential diagonostics{% endif %}
+					</label>
+					<p id="error"></p>
+					{% if form.errors %}
+						{% for error in form.media.errors %}
+							<p style="color: red; margin-top: -20px;">{{error}}</p>
+						{% endfor %}
+					{% endif %}
+
+					{% if value == 'edit' and instance.media %}
+					<div class="col s12">
+						<input id="media-clear_id" name="media-clear" type="checkbox" /> 
+						<label for="media-clear_id">Clear : </label>
+						<a href="{{instance.media.url }}" target = "new">	{{instance.media }}	</a>
+					</div>
+					{% endif %}
+				</div>
+				<input type="file" name="media" id="id_media" style="display: none;">
+				<input type="hidden" name="type" value="{{category}}">
+				<input type="hidden" name="thumbnail">
+				<div class="col s4">
+					<button title="Upload image" class="waves-effect waves-light btn-flat" id="image-upload"><i class="material-icons">photo_camera</i></button>
+				</div>
+				<div class="col s4">
+					<button title="Upload video" class="waves-effect waves-light btn-flat" id="video-upload"><i class="material-icons">videocam</i></button>
+				</div>
+				<div class="col s4" style="border-right: none;">
+					<button class="waves-effect waves-light btn-flat" id="submit" type="submit" style="margin-bottom: 10px;">submit</button>
+				</div>
+				<div class="col s12 thumbnail"><img id="thumb"></div>
+			</div>
+		</form>
+	</div>
+</div>
+{% endif %}

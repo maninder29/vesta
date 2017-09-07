@@ -1,0 +1,79 @@
+{% extends 'common/base.html' %}
+{% load staticfiles %}
+
+{% block title %}Vesta | Feedback{% endblock %}
+
+{% block css %}
+<style type="text/css">
+  .indicator{
+    display: none;
+  }
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% if user.is_authenticated %}
+{{ block.super }}
+{% else %}
+<li><a href="{% url 'account_login' %}">Login<i class="material-icons">power_settings_new</i></a></li>
+<li><a href="{% url 'account_signup' %}">Sign Up<i class="material-icons">power_settings_new</i></a></li>
+{% endif %}
+{% endblock %}
+
+{% block tabs %}
+<div class="col l7 offset-l3 m9 s11" style="padding: 0; margin-bottom: 60px;">
+  <ul class="tabs tabs-fixed-width">
+    <li class="tab col s3">
+      <a href="javascript:void(0)">Feedback</a>
+    </li>
+  </ul>
+</div>
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h3>Feedback</h3>
+  <div class="row">
+    <form class="col s12" method="post">{% csrf_token %}
+      <div class="input-field col s12 l4">
+        <input id="id_name" name="name" type="text" class="validate" maxlength="50" required>
+        <label for="id_name">Full name</label>
+      </div>
+      <div class="input-field col s12 l5">
+        <input id="id_email" name="email" type="email" class="validate" maxlength="50" required>
+        <label for="id_email">Email address</label>
+      </div>
+      <div class="input-field col s12 l3">
+        <input id="id_phone" name="phone" type="text" class="validate" maxlength="15" required>
+        <label for="id_phone">Phone number</label>
+      </div>
+      <div class="input-field col s12">
+        <textarea id="id_content" name="content" class="materialize-textarea" required></textarea>
+        <label for="id_content">Content</label>
+      </div>
+      <h5>Category :</h5>
+      <p>
+        <input name="category" type="radio" id="id_category_1" value="1" required />
+        <label for="id_category_1">User verification</label>
+      </p>
+      <p>
+        <input name="category" type="radio" id="id_category_2" value="2" />
+        <label for="id_category_2">Bug report</label>
+      </p>
+      <p>
+        <input name="category" type="radio" id="id_category_3" value="3" />
+        <label for="id_category_3">Suggestion</label>
+      </p>
+      <p>
+        <input name="category" type="radio" id="id_category_4" value="4" />
+        <label for="id_category_4">Review</label>
+      </p>
+      <button class="btn waves-effect waves-light grey darken-4" type="submit" name="action">Submit
+        <i class="material-icons right">send</i>
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block post_loader_js %}{% endblock %}

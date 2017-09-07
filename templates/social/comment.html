@@ -1,0 +1,108 @@
+{% extends 'common/base.html' %}
+{% load staticfiles %}
+{% load customer_tags %}
+
+{% block title %}Vesta | Comments{% endblock %}
+
+{% block og %}
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@maninderdtu" />
+<meta name="twitter:creator" content="@maninderdtu" />
+<meta property="og:title" content="Vesta"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Vesta"/>
+<meta property="fb:app_id" content="703088589852677"/>
+<meta property="og:url" content="http://vestapp.in/posts/{{post.id}}"/>
+<meta property="og:image" content="{% if post.media and post.is_video %}http://vestapp.in{% static 'img/video_thumb.jpeg' %}{% elif post.media and not post.is_video %}http://vestapp.in{{post.media.url}}{% elif post.og and post.og.image %}{{post.og.image}}{% else %}http://vestapp.in{% static 'img/logo.png' %}{% endif %}"/>
+<meta property="og:description" content="{% if post.content %}{{post.content|truncatechars:120}}{% else %}Vesta - Your digital healthcare ecosystem.{% endif %}"/>
+{% endblock %}
+
+
+{% block css %}
+<style type="text/css">
+  .indicator{
+    display: none;
+  }
+</style>
+{% endblock %}
+
+{% block sidebar %}
+{% if user.is_authenticated %}
+{{ block.super }}
+{% else %}
+<li><a href="{% url 'account_login' %}">Login<i class="material-icons">power_settings_new</i></a></li>
+<li><a href="{% url 'account_signup' %}">Sign Up<i class="material-icons">power_settings_new</i></a></li>
+{% endif %}
+{% endblock %}
+
+{% block tabs %}
+<div class="col l7 offset-l3 m9 s11" style="padding: 0; margin-bottom: 60px;">
+  <ul class="tabs tabs-fixed-width">
+    <li class="tab col s3">
+      <a href="javascript:void(0)">Comments</a>
+    </li>
+  </ul>
+</div>
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col s12">
+      {% include 'social/post.html' %}
+    </div>
+    <div class="col s12">
+      <div class="row" style="box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);background: white;margin-left: auto;margin-right: auto;" id="comments">
+        <div class="col s12">
+          <form method="post">{% csrf_token %}
+            <div class="row" style="margin: 0">
+              <div class="input-field col s10">
+                <textarea id="textarea1" class="materialize-textarea" name="content"></textarea>
+                <label for="textarea1">Tell your views</label>
+              </div>
+              <div class="col s2" style="line-height: 8">
+                <button class="btn-floating waves-effect waves-light" type="submit" style="margin-top: 5px;background: #ff4e4e">
+                  <i class="material-icons right">send</i>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <ul class="collection" id="comment-section">
+        {% for c in comments %}
+        <li class="collection-item avatar" id="{{c.id}}" style="min-height: 0;">
+          <img src="{{c.profile.thumbnail_url}}" alt="" class="circle">
+          <span class="title"><a href="{% url 'profile' c.profile.id %}">{{c.profile.name}}</a> <!-- <small>(Designation)</small> --></span>
+          <p>{{c.content|linebreaksbr}}</p>
+          <a href="{% url 'comment_like' c.id %}" class="likebtnComment">
+            <i class="fa fa-heart{% if request.user.is_authenticated %} {% if request.user|comment_liked_by_user:c %}liked{% endif %}{% endif %}"></i>
+          </a>
+          <a href class="comment-like-count">{{c.like_count}}</a>
+          <span class="options">
+            {% if request.user.is_authenticated and request.user.profile == c.profile %}
+            <a href="{% url 'comment_update' c.id %}" class="comment-update">Update</a> | 
+            <a href="{% url 'comment_delete' c.id %}" class="deletebtn">Delete</a>
+            {% endif %}
+          </span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div id="commentUpdateModal" class="modal">
+  <div class="modal-content">
+    <h4>Update</h4>
+    <textarea type="textarea" name="content" class="materialize-textarea" required></textarea>
+    <button class="modal-close btn waves-effect">Submit</button>
+  </div>
+</div>
+
+{% endblock %}
+{% block post_loader_js %}{% endblock %}
+{% block js %}
+<script type="text/javascript" src="{% static 'social/js/comment.js' %}"></script>
+{% endblock %}

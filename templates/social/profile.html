@@ -1,0 +1,262 @@
+{% extends 'common/base.html' %}
+{% load staticfiles %}
+{% load customer_tags %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'social/css/Jcrop.css' %}">
+<style type="text/css">
+  .indicator{
+    display: none;
+  }
+</style>
+{% endblock %}
+
+{% block tabs %}
+<div class="col l7 offset-l3 m9 s11" style="padding: 0; margin-bottom: 45px;">
+  <ul class="tabs tabs-fixed-width">
+    <li class="tab col s3">
+      <a href="javascript:void(0)">{{profile_user.profile.name}}{% if profile_user.profile.vip %}<i style="position: relative; top: 2px;" title="Verified profile" class="material-icons vip">check_circle</i>{% endif %}</a>
+    </li>
+  </ul>
+</div>
+<div class="row" style="margin-bottom: -3%">
+  <div class="col l7 offset-l3 m9 s12">
+    <div id="profile-cover">
+      <img src="{{profile_user.profile.cover_url}}" class="responsive-img materialboxed">
+      {% if profile_user == request.user %}
+      <a title="Upload cover picture" class="waves-effect waves-light btn profile-cover-upload" href="#profileCoverModal"><i class="material-icons left">camera_alt</i>upload</a>
+      {% endif %}
+    </div>
+    <div class="profile-dp">
+      <img src="{{profile_user.profile.dp_url}}" class="responsive-img">
+      {% if profile_user == request.user %}
+      <a title="Upload profile picture" class="waves-effect waves-light btn profile-dp-upload" href="#profileDpModal"><i class="material-icons left">camera_alt</i></a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block title %}VESTA | {{profile_user.profile.name}}{% endblock %}
+
+{% block content %}
+<div class="popup-overlay">
+  <img src="{{profile_user.profile.dp_url}}" class="popup responsive-img">
+</div>
+
+<div class="row">
+  <div class="col s12 m5 l4" style="margin-top: 5%;padding: 0">
+    {% if profile_user != request.user %}
+      {% if request.user|follows:profile_user %}
+        <a style="width: 100%;background: #1b1c1d;padding: 0 1rem;" class="waves-effect waves-light btn" href="{% url 'unfollow' profile_user.id %}">
+          <i class="material-icons right">person_add</i>unfollow
+        </a>
+      {% else %}
+        <a style="width: 100%;background: #1b1c1d;padding: 0 1rem;" class="waves-effect waves-light btn" href="{% url 'follow' profile_user.id %}">
+          <i class="material-icons right">person_add</i>follow
+        </a>
+      {% endif %}
+    {% endif %}
+    <div class="card profile-card">
+      <div class="card-content black-text">
+        <span class="card-title">Followers</span>
+        <div class="row" style="margin: 0">
+          {% for f in followers %}
+            <div class="col s12" style="padding: 0; height: 40px; margin-bottom: 5px;">
+              <div style="background: url({{f.thumbnail_url}});"></div>
+              <a href="{% url 'profile' f.user.id %}">{{f.name}}</a>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="card-action">
+        <a href="{% url 'all_followers' profile_user.id %}">View all</a>
+      </div>
+    </div>
+    <div class="card profile-card">
+      <div class="card-content black-text">
+        <span class="card-title">Following</span>
+        <div class="row" style="margin: 0">
+          {% for f in following %}
+            <div class="col s12" style="padding: 0">
+              <div style="background: url({{f.thumbnail_url}});"></div>
+              <a href="{% url 'profile' f.user.id %}">{{f.name}}</a>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="card-action">
+        <a href="{% url 'all_following' profile_user.id %}">View all</a>
+      </div>
+    </div>
+    <div class="card profile-card">
+      <div class="card-content black-text">
+        <span class="card-title">Photos</span>
+        <div class="row" style="margin: 0">
+          {% for f in pics %}
+            <div class="col s6" style="padding: 0 2px; margin-bottom: 4px;">
+              <img src="{{f}}" style="width: 100%" class="materialboxed">
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="card-action">
+        <a href="{% url 'all_photos' profile_user.id %}">View all</a>
+      </div>
+    </div>
+    <div class="card profile-card">
+      <div class="card-content black-text">
+        <span class="card-title">Videos</span>
+        <div class="row" style="margin: 0">
+          {% for f in videos %}
+            <div class="col s12" style="padding: 0 2px; margin-bottom: 4px;">
+              <video controls preload="metadata" style="width: 100%">
+                <source src="{{f}}" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="card-action">
+        <a href="{% url 'all_videos' profile_user.id %}">View all</a>
+      </div>
+    </div>
+  </div>
+  <div class="col s12 m7 l8 profile-post-section" id="post-section">
+    {% if profile_user != request.user %}
+    <div id="create-post" class="row">
+      <div class="col s12">
+        <form method='POST' action='' enctype="multipart/form-data" id="post_form">{%csrf_token%}
+          <div class="row" style="margin-bottom: 0">
+            <div class="col s12 input-field">
+              <textarea class="materialize-textarea" id="id_content" name="content" style="color:black">{{ instance.content }}</textarea>
+              <label for="id_content" class="active" id="content_label">Write on {{profile_user.profile.name}}<b>'</b>s wall</label>
+              <p id="error"></p>
+              {% if form.errors %}
+                {% for error in form.media.errors %}
+                  <p style="color: red; margin-top: -20px;">{{error}}</p>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <input type="file" name="media" id="id_media" style="display: none;">
+            <input type="hidden" name="thumbnail">
+            <div class="col s4">
+              <button title="Upload image" class="waves-effect waves-light btn-flat" id="image-upload"><i class="material-icons">photo_camera</i></button>
+            </div>
+            <div class="col s4">
+              <button title="Upload video" class="waves-effect waves-light btn-flat" id="video-upload"><i class="material-icons">videocam</i></button>
+            </div>
+            <div class="col s4" style="border-right: none;">
+              <button class="waves-effect waves-light btn-flat" id="submit" type="submit" style="margin-bottom: 10px;">submit</button>
+            </div>
+            <div class="col s12 thumbnail"><img id="thumb"></div>
+          </div>
+        </form>
+      </div>
+    </div>
+    {% endif %}
+    {% for post in object_list %}
+      {% include 'social/post.html' %}
+    {% endfor %}
+  </div>
+  {% comment %}
+  <div class="col s12 m7 l8" style="text-align: center; display: inline-block;">
+    <div id="post-loader" class="preloader-wrapper big active" url="/posts/new_{{category}}_list/{{id}}/{{profile_user.id}}" status="active">
+      <div class="spinner-layer spinner-blue">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div><div class="gap-patch">
+          <div class="circle"></div>
+        </div><div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+      <div class="spinner-layer spinner-red">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div><div class="gap-patch">
+          <div class="circle"></div>
+        </div><div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+      <div class="spinner-layer spinner-yellow">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div><div class="gap-patch">
+          <div class="circle"></div>
+        </div><div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+      <div class="spinner-layer spinner-green">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div><div class="gap-patch">
+          <div class="circle"></div>
+        </div><div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endcomment %}
+</div>
+
+  <div id="profileDpModal" class="modal">
+    <div class="modal-content">
+      <h4>Upload profile pic</h4>
+      <form method="post" enctype="multipart/form-data">{%csrf_token%}
+        <div class="row" style="margin-bottom: 0px;">
+          <div class="col s10 file-field input-field">
+            <div class="btn" style="width: 70px;padding: 0px;background: grey">
+              <span>Upload</span>
+              <input type="file" id="id_dp" name="dp">
+            </div>
+            <div class="file-path-wrapper">
+              <input class="file-path validate" type="text">
+            </div>
+          </div>
+          <div class="col s2">
+            <button class="btn-floating waves-effect waves-light grey darken-3" type="submit" style="margin-top: 15px;">
+              <i class="material-icons right">send</i>
+            </button>
+          </div>
+        </div>
+      </form>
+      <div id="image-wrapper">
+        <img id="image">
+      </div>
+    </div>
+  </div>
+
+  <div id="profileCoverModal" class="modal">
+    <div class="modal-content">
+      <h4>Upload cover pic</h4>
+      <form method="post" enctype="multipart/form-data">{%csrf_token%}
+        <div class="row" style="margin-bottom: 0px;">
+          <div class="col s10 file-field input-field">
+            <div class="btn" style="width: 70px;padding: 0px;background: grey">
+              <span>Upload</span>
+              <input type="file" id="id_cover" name="cover">
+            </div>
+            <div class="file-path-wrapper">
+              <input class="file-path validate" type="text">
+            </div>
+          </div>
+          <div class="col s2">
+            <button class="btn-floating waves-effect waves-light grey darken-3" type="submit" style="margin-top: 15px;">
+              <i class="material-icons right">send</i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+{% block post_loader_js %}{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="{% static 'social/js/profile-28-06-17.js' %}"></script>
+{% endblock %}

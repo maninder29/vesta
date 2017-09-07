@@ -1,0 +1,88 @@
+{% load staticfiles %}
+{% load customer_tags %}
+
+<div class="row post">
+  <div class="col s12">
+    {% if request.user.is_authenticated %}
+    <a class="btn-floating waves-effect waves-light post-menu {% if not post.media and not post.og and not post.welcome %}media-less{% endif %}">
+    <i class="material-icons post-menu-i">menu</i></a>
+    <div class="collection post-collection">
+      {% if post.profile == request.user.profile %}
+      <a href="{% url 'update' type_of_post=post.type id=post.id %}" class="collection-item"><i class="fa fa-pencil" aria-hidden="true"></i>Edit</a>
+      <a href="{% url 'delete' type_of_post=post.type id=post.id %}" class="collection-item deletebtn"><i class="fa fa-trash" aria-hidden="true"></i>Delete</a>
+      {% endif %}
+      <a href="{% url 'save_post' type_of_post=post.type id=post.id %}" class="collection-item savebtn">
+        <i class="fa fa-download" aria-hidden="true"></i>{% if request.user|has_saved:post %}Unsave{% else %}Save{% endif %}
+      </a>
+      <a href="{% url 'follow_post' type_of_post=post.type id=post.id %}" class="collection-item followbtn">
+        <i class="fa fa-envelope" aria-hidden="true"></i>{% if request.user|has_followed:post %}Remove{% else %}Discuss{% endif %}
+      </a>
+    </div>
+    {% endif %}
+    {% if post.welcome %}<img src="{{post.image_url}}" class="materialboxed" style="width: 100%">{% endif %}
+    {% if post.media %}
+      {% if post.is_video %}
+        <video controls preload="metadata" style="width: 100%;margin-bottom: 42px;">
+          <source src="{{post.media.url}}" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      {% else %}
+        <img src="{{post.media.url}}" class="materialboxed" style="width: 100%">
+      {% endif %}
+    {% elif post.og %}
+      {% if post.og.site in "Vimeo, YouTube" %}
+        <div class="video-container" style="margin-bottom: 48px;">
+          <iframe src="{{post.og.embed_src}}" frameborder="0" allowfullscreen></iframe>
+        </div>
+      {% else %}
+        <a class="thumbnail" target="_new" href="{{post.og.link}}" title="{{post.og.link}}">
+          <div class="row">
+            <div class="s12">
+              <div class="row">
+                <div class="col s12 m6 thumbnail-image" style="background: url({{post.og.image}});"></div>
+                <div class="col s12 m6" style="color:black">
+                  <h5>{{post.og.title}}</h5>
+                  <p>{{post.og.description}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+      {% endif %}
+    {% endif %}
+    <span class="post-name">
+      <a href="{% url 'profile' post.profile.user.id %}">{{post.profile.name}}
+      {% if post.profile.vip %}<i title="Verified profile" class="material-icons vip">check_circle</i>{% endif %}
+      </a>
+      {% if post.wall_profile %}
+        <i class="material-icons">play_arrow</i>
+        <a href="{% url 'profile' post.wall_profile.user.id %}">{{post.wall_profile.name}}
+        {% if post.wall_profile.vip %}<i title="Verified profile" class="material-icons vip">check_circle</i>{% endif %}
+        </a>
+      {% endif %}
+    </span>
+  </div>
+  <div class="col s12">
+    <div style="background: url({{post.profile.thumbnail_url}});"></div>
+  </div>
+  <div class="col s12 content">
+    {% if single_post %}
+      {{post.content|linebreaksbr}}
+    {% else %}
+      {{post.content|linebreaksbr|truncatechars:360}}
+      {% if post.content|length > 360 %}<a href="{% url 'detail' type_of_post=post.type id=post.id %}">read more</a>{% endif %}
+    {% endif %}
+  </div>
+  <div class="col s12 hidden-div"></div>
+  <div class="col s12">
+    {% if request.user.is_authenticated %}
+    <a href="{% url 'like' type_of_post=post.type id=post.id %}" class="likebtn">
+      <i class="fa fa-heart {% if request.user|post_liked_by_user:post %}liked{% endif %}"></i>
+    </a>
+    <a href="{% url 'get_post_likers' type_of_post=post.type id=post.id %}" class="like-count">{{post.like_count}} likes</a>
+    {% endif %}
+    <a class="commentbtn" href="{% url 'detail' type_of_post=post.type id=post.id %}#comments"><i class="fa fa-comment-o"></i><span>{{post.comment_count}} comments</span></a>
+    <a class="sharebtn" pid="{{post.type}}/{{post.id}}" text="{% if post.content %}{{post.content|truncatechars:120}}{% else %}Vesta - Your digital healthcare ecosystem{% endif %}" href><i class="fa fa-share-alt"></i>share</a>
+    <a class="viewbtn" href="javascript:void(0)" title="Number of views"><i class="fa fa-eye"></i><span>{{post.views}}</span></a>
+  </div>
+</div>

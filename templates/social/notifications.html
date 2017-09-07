@@ -1,0 +1,12 @@
+{% load customer_tags %}
+
+{% for i in notifications %}
+<li {% if not i.active %}style="background: rgba(0,0,0,0.2);"{% endif %}>
+	<a class="waves-effect waves-light" href="{% url 'deactivate_notification' i.id %}" title="{{i.title}}">
+		<div style="background: url({{i.profile2.thumbnail_url}})"></div>
+		<span>{{i.title}}</span>
+	</a>
+</li>
+{% endfor %}
+<li><a class="waves-effect waves-light" href="{% url 'all_notifications' %}">View all notifications</a></li>
+<a href="{% url 'mark_all_notifications_read' %}" style="z-index: 2"><i class="material-icons" title="Mark all notifications as read">done_all</i></a>

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block navbar %}
+<div class="navbar-fixed">
+	<nav>
+		<div class="nav-wrapper">
+			<a href="/" class="brand-logo">Vesta</a>
+			<ul class="right hide-on-med-and-down">
+				{% if user.is_authenticated %}<li><a href="#">{{user.email}}</a></li>{% endif %}
+				<li><a href="{% url 'account_login' %}">Login</a></li>
+				<li><a href="{% url 'account_logout' %}">Logout</a></li>
+			</ul>
+		</div>
+	</nav>
+</div>
+{% endblock %}
+{% block content %}
+<div class="row">
+	{% include 'categories.html' %}
+	<div class="col l8 m9">
+		<div class="row" style="border-bottom: 1px dotted black">
+			<div class="col s2" style="text-align: center;font-size: 20px;">Clinic</div>
+			<div class="col s2" style="text-align: center;font-size: 20px;">Day</div>
+			<div class="col s2" style="text-align: center;font-size: 20px;">Start time</div>
+			<div class="col s2" style="text-align: center;font-size: 20px;">End time</div>
+			<div class="col s2" style="text-align: center;font-size: 20px;">Max token</div>
+			<div class="col s2" style="text-align: center;font-size: 20px;">Active</div>
+		</div>
+		<form action='' method='POST'>{% csrf_token %}
+			{{ formset.management_form }}
+			{% for form in formset %}
+				<div class="input-field col s2">
+					{{form.clinic}}
+				</div>
+				<div class="input-field col s2">
+					{{form.day}}
+				</div>
+				<div class="input-field col s2">
+					{{form.start}}
+				</div>
+				<div class="input-field col s2">
+					{{form.end}}
+				</div>
+				<div class="input-field col s2">
+					{{form.max_token}}
+				</div>
+				<div class="input-field col s2" style="min-height: 66px">
+					{{form.active}}
+					<label for="id_form-{{forloop.counter0}}-active">Active</label>
+				</div>
+				{{form.id}}
+			{% endfor %}
+			<input type='submit' class="waves-effect waves-light btn">
+		</form>
+		<a href="#" class="btn-floating btn-large waves-effect waves-light red tooltipped" data-position="top" data-tooltip="Add a schedule" style="position: fixed;bottom: 20px;right: 17%"><i class="material-icons">add</i></a>
+	</div>
+	{% include 'ads.html' %}
+</div>
+{% endblock %}

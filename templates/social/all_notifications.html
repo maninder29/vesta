@@ -1,0 +1,42 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Vesta | Notifications{% endblock %}
+
+
+{% block css %}
+<style type="text/css">
+  .indicator{
+    display: none;
+  }
+</style>
+{% endblock %}
+
+{% block tabs %}
+<div class="col l7 offset-l3 m9 s11" style="padding: 0; margin-bottom: 45px;">
+  <ul class="tabs tabs-fixed-width">
+    <li class="tab col s3">
+      <a href="javascript:void(0)">Notifications</a>
+    </li>
+  </ul>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col s12">
+      <div class="collection">
+        {% for n in notifications %}
+          <a href="{% url 'deactivate_notification' n.id %}" class="collection-item{% if n.active %} active{% endif %}" style="color:black">
+            <img src="{{n.profile2.thumbnail_url}}" style="width: 40px;height: 40px;position: absolute;border-radius: 50%">
+            <span style="margin-left: 50px; display: inline-block;">{{n.title}}</span>
+            <br><small style="margin-left: 50px">{{n.timestamp|timesince}} ago</small>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block post_loader_js %}{% endblock %}

@@ -1,0 +1,103 @@
+#video-section{
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-around;
+	position: relative;
+}
+
+#video-section > video{
+	width: 70%;
+	margin-top: 15px;
+}
+
+#video-section > div{
+	font-size: 16px;
+	flex: 0 0 70%;
+	color: white;
+	margin-top: 50px;
+	line-height: 50px;
+	text-transform: capitalize;
+}
+
+#video-section > section{
+	flex: 0 0 70%;
+	display: flex;
+	align-items: center;
+	height: 40px;
+	background-color: rgba(10, 10, 10, 0.8);
+	padding: 0 15px;
+}
+
+#welcome{
+	font-size: 40px;
+}
+
+#vesta{
+	font-size: 25px;
+}
+
+#video-section > section > img{
+	flex: 0 0 20px;
+	height: 20px;
+	cursor: pointer;
+}
+
+#video-section > section > ul{
+	flex: 1 0 0;
+	display: flex;
+	justify-content: space-between;
+	padding: 0 50px;
+}
+
+.common-video{
+	flex: 0 0 15px;
+	height: 15px;
+	border-radius: 15px;
+	background-color: grey;
+	margin-right: 10px;
+	cursor: pointer;
+	transition: 0.5s;
+}
+
+#video-section > section > ul > li:last-child{
+	margin-right: 0;
+}
+
+#video-section > section > ul > li:hover{
+	background-color: white;
+}
+
+.active-video{
+	background-color: white;
+}
+
+.inactive-video{
+	background-color: grey;
+}
+
+@media screen and (max-width: 768px){
+	#video-section > section,
+	#video-section > div{
+		flex: 0 0 90%;
+	}
+
+	#video-section > video{
+		width: 90%;
+	}
+
+	#welcome{
+		font-size: 30px;
+	}
+
+	#vesta{
+		font-size: 20px;
+	}
+
+	#video-section > div{
+		font-size: 13px;
+	}
+
+	#video-section > div{
+		margin-top: 80px;
+	}
+}

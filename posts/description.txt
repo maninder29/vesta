@@ -1,0 +1,140 @@
+common URL - vestapp.in/api/posts
+
+1. myspace posts
+
+	GET request at /myspace
+
+2. differential posts
+
+	GET request at /differential
+
+3. insights posts
+
+	GET request at /insights
+
+4. create myspace post
+
+	POST request at /myspace/
+
+		{
+			'content' : content,
+			'media' : media
+		}
+
+4. create myspace post
+
+	POST request at /myspace/
+
+		{
+			'content' : content,
+			'media' : media
+		}
+
+5. create differential post
+
+	POST request at /differential/
+
+		{
+			'content' : content,
+			'media' : media
+		}
+
+6. create insights post
+
+	POST request at /insights/
+
+		{
+			'content' : content,
+			'media' : media
+		}
+
+7. edit any post
+
+	PUT request at /myspace/<post_id>/
+
+		{
+			'content' : content,
+			'media' : media
+		}
+		or
+		{
+			'content' : content,
+		}
+		or
+		{
+			'media' : media
+		}
+
+8. delete any post
+
+	DELETE request at /myspace/<post_id>/
+
+9. like/dislike any post
+
+	GET request at /like/<post_id>
+
+10. check if user has liked a particular post or not
+
+	GET request at /like/check/<post_id>
+
+11. details of any post
+
+	GET request at /myspace/<post_id>
+
+12. write a comment
+
+	POST request at /comment/
+
+		{
+			'post' : <post_id>,
+			'content' : content
+		}
+
+13. update a comment
+
+	PUT request at /comment/<comment_id>/
+
+		{
+			'content':content
+		}
+
+14. delete a comment
+
+	DELETE request at /comment/<comment_id>/
+
+15. user profile
+
+	GET request at /profile/<user_id>
+
+16. friend list of a user
+
+	GET request at /friendlist/<user_id>
+
+17. pending friend requests of a user
+
+	GET requst at /Follows/<user_id>
+
+18. accept friend request
+
+	PUT request at /Follows/<friend_request_id>
+
+19. reject friend request
+
+	DELETE request at /Follows/<friend_request_id>
+
+20. send friend request
+
+	POST request at /sendrequest/
+
+		{
+			'to_user' : <user_id>
+		}
+	NOTE : <user_id> is the user ID of the user to whom friend request is sent
+
+21. like/dislike any comment
+
+	GET request at /comment/like/<comment_id>
+
+22. check if user has liked a particular comment or not
+
+	GET request at comment/like/check/<comment_id>
