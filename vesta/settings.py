@@ -10,7 +10,7 @@ DEBUG = True
 
 ENV = 6
 
-ALLOWED_HOSTS = ['198.199.120.34', 'vestapp.in']
+ALLOWED_HOSTS = ['198.199.120.34', 'vestapp.in', '139.59.46.240']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
